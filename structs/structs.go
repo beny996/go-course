@@ -32,6 +32,16 @@ type rect struct {
 	height int
 }
 
+type person struct {
+	name   string
+	age    int
+	gender string
+}
+
+func (t person) printData() {
+	fmt.Printf("My name is %s, i'm %v years old and i'm %s", t.name, t.age, t.gender)
+}
+
 //this creates a method on struct "rect"
 func (r rect) area() int {
 	return r.width * r.height
@@ -140,4 +150,12 @@ func main() {
 		username: "Vukasin",
 		password: "Test password",
 	})
+
+	person1 := person{
+		name:   "Vukasin",
+		age:    27,
+		gender: "male",
+	}
+
+	person1.printData()
 }
