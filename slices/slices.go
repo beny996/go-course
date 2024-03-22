@@ -8,7 +8,7 @@ import (
 // arrays
 
 func getMessageWithRetries() [3]string {
-	return [3]string{"click here to sign in", "pretty plaese click here", "we beg you to sign up"}
+	return [3]string{"click here to sign in", "pretty please click here", "we beg you to sign up"}
 
 }
 
@@ -66,10 +66,62 @@ func getMessageWithRetriesForPlan(plan string) ([]string, error) {
 
 // mySlice := []string{"I", "Love", "Go"}
 
+func getMessageCost(messages []string) []float64 {
+	costs := make([]float64, len(messages))
+
+	for i := 0; i < len(messages); i++ {
+		message := messages[i]
+		cost := float64(len(message)) * 0.01
+		costs[i] = cost
+	}
+	return costs
+}
+
+func test(messages []string) {
+	costs := getMessageCost(messages)
+
+	fmt.Println("Messages:")
+	for i := 0; i < len(messages); i++ {
+		fmt.Printf("- %v\n", messages[i])
+	}
+	fmt.Println("Costs: ")
+	for i := 0; i < len(costs); i++ {
+		fmt.Printf("- %v\n", costs[i])
+	}
+}
+
+//variadic functions
+
+func sum(nums ...float64) float64 {
+	total := 0.0
+
+	for i := 0; i < len(nums); i++ {
+		total += nums[i]
+	}
+
+	return total
+}
+
+func test2(nums ...float64) {
+	total := sum(nums...)
+
+	fmt.Printf("Summing %v costs...\n", len(nums))
+	fmt.Printf("Bill for the month: %.2f\n", total)
+	fmt.Println("==== End report ====")
+}
+
 func main() {
 	send("Bob", 0)
 	send("Alice", 1)
 	send("Mangalam", 2)
 	send("Ozgur", 3)
+
+	test([]string{
+		"This is a first message",
+		"This is test",
+		"Testing",
+	})
+
+	test2(1, 2, 3, 4, 5, 6)
 
 }
