@@ -110,6 +110,97 @@ func test2(nums ...float64) {
 	fmt.Println("==== End report ====")
 }
 
+type cost struct {
+	day   int
+	value float64
+}
+
+func getCostsByDay(costs []cost) []float64 {
+	costsByDay := []float64{}
+	for i := 0; i < len(costs); i++ {
+		cost := costs[i]
+
+		// we cannot assign a value to slice at some index, if that index is of the length of the slice.
+		// for example - if we have a slice that is of length 3 (testSlice : = []float64 {1.0, 2.0, 3.0}), we cannot do testSlice[3] = 4.0, that would be an error
+		// we can append a new item to the slice (in this case, we are just adding a zero), that will increase the slice length, and therefore, we can add to that slice index
+		// so now, we can do something like testSlice[3] += 4.0, we can also reassign the value like testSlice[3] = 4.0
+		for cost.day >= len(costsByDay) {
+			costsByDay = append(costsByDay, 0.0)
+		}
+
+		costsByDay[cost.day] += cost.value
+	}
+	return costsByDay
+}
+
+func test3(costs []cost) {
+	fmt.Printf("Creating daily buckets for %v costs", len(costs))
+	costsByDay := getCostsByDay(costs)
+	fmt.Println("Costs by day:")
+	for i := 0; i < len(costsByDay); i++ {
+		fmt.Printf(" - Day %v: %.2f\n", i, costsByDay[i])
+	}
+	fmt.Println("======= END Report ========")
+}
+
+// slice of slices
+
+func createMatrix(rows, cols int) [][]int {
+	matrix := [][]int{}
+
+	for i := 0; i < rows; i++ {
+		row := []int{}
+		for j := 0; j < cols; j++ {
+			row = append(row, i*j)
+		}
+		matrix = append(matrix, row)
+	}
+	return matrix
+}
+
+func test4(rows, cols int) {
+	fmt.Printf("Creating %v x %v matrix....\n", rows, cols)
+	matrix := createMatrix(rows, cols)
+	for i := 0; i < len(matrix); i++ {
+		fmt.Println(matrix[i])
+	}
+	fmt.Println("====== END Report =======")
+}
+
+// tricky slices
+
+// we should not be doing this ===> someSlice = append(otherSlice, element)
+// instead, when we append an item to the slice, we should always reassign to that same slice
+
+// range
+
+// example ===> fruits := []string{"apple", "banana", "grape"}
+// for i, fruit := range fruits {
+//	fmt.Println(i, fruit) => this will output 0 apple, 1 banana, 2 grape
+// }
+
+func indexOfFirstBadWord(msg []string, badWords []string) int {
+	for i, word := range msg {
+		for _, badWord := range badWords {
+			if word == badWord {
+				return i
+			}
+		}
+	}
+	return -1
+}
+
+func test5(msg []string, badWords []string) {
+	i := indexOfFirstBadWord(msg, badWords)
+	fmt.Printf("Scanning message: %v for bad words: \n", msg)
+
+	for _, badWord := range badWords {
+		fmt.Println(" -", badWord)
+	}
+	fmt.Printf("Index: %v\n", i)
+	fmt.Println("===================")
+}
+
 func main() {
 	send("Bob", 0)
 	send("Alice", 1)
@@ -124,4 +215,19 @@ func main() {
 
 	test2(1, 2, 3, 4, 5, 6)
 
+	test3([]cost{
+		{0, 1.0},
+		{1, 2.0},
+		{1, 3.1},
+		{2, 2.5},
+		{3, 3.6},
+		{3, 2.7},
+		{4, 3.34},
+	})
+
+	test4(10, 10)
+
+	badWords := []string{"crap", "shoot", "dang", "frick"}
+	message := []string{"hey", "there", "frick", "John"}
+	test5(message, badWords)
 }
